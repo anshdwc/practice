@@ -36,8 +36,21 @@ function UserList() {
         loadData()
     }, [])
 
+    function toggleFavorite(id: number) {
+        setUsers((currentUsers) =>
+            currentUsers.map((user) =>
+                user.id === id ? { ...user, favorite: !user.favorite } : user
+            )
+        )
+    }
+
     const filteredUsers = users.filter((user) =>
         user.name.toLowerCase().includes(search.toLowerCase())
+    )
+
+    const favoriteCount = users.reduce(
+        (total, user) => (user.favorite ? total + 1 : total),
+        0
     )
 
     if (loading) {
@@ -60,6 +73,11 @@ function UserList() {
 
     return (
         <>
+
+            <p className="mb-4 text-gray-600">
+                {users.length} users, {postCount} posts, {favoriteCount} favorites
+            </p>
+
             <label htmlFor="search" className="sr-only">
                 Search users by name
             </label>
@@ -77,7 +95,9 @@ function UserList() {
             ) : (
                 <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     {filteredUsers.map((user) => (
-                        <UserCard key={user.id} user={user} />
+                        <UserCard key={user.id}
+                            user={user}
+                            onToggleFavorite={toggleFavorite} />
                     ))}
                 </ul>
             )}
