@@ -9,6 +9,7 @@ function UserList() {
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState('')
     const [postCount, setPostCount] = useState(0)
+    const [search, setSearch] = useState('')
 
     useEffect(() => {
         async function loadData() {
@@ -35,6 +36,10 @@ function UserList() {
         loadData()
     }, [])
 
+    const filteredUsers = users.filter((user) =>
+        user.name.toLowerCase().includes(search.toLowerCase())
+    )
+
     if (loading) {
         return (
             <div
@@ -55,14 +60,27 @@ function UserList() {
 
     return (
         <>
-            <p className='mb-4 text-gray-600 '>
-                {users.length} users and {postCount} posts loaded
-            </p>
-            <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                {users.map((user) => (
-                    <UserCard key={user.id} user={user} />
-                ))}
-            </ul>
+            <label htmlFor="search" className="sr-only">
+                Search users by name
+            </label>
+            <input
+                id="search"
+                type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search by name..."
+                className="mb-4 w-full rounded border border-gray-300 p-2"
+            />
+
+            {filteredUsers.length === 0 ? (
+                <p>No users found.</p>
+            ) : (
+                <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    {filteredUsers.map((user) => (
+                        <UserCard key={user.id} user={user} />
+                    ))}
+                </ul>
+            )}
         </>
     )
 }
