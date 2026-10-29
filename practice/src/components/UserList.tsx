@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import type { User } from '../types'
-import UserCard from './UserCard'
+import UserCard from '../context/UserCard'
 
 const API_URL = import.meta.env.VITE_API_URL
 
@@ -55,7 +55,7 @@ function UserList() {
 
     return (
         <>
-            <p className='mb-4 text-gray-600 '>
+            <p className='mb-4 text-gray-600 dark:text-gray-300 '>
                 {users.length} users and {postCount} posts loaded
             </p>
             <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2">
